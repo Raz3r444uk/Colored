@@ -8,60 +8,139 @@ const inputBlue = document.createElement("input");
 inputBlue.className = "blue input";
 inputBlue.placeholder = "BLUE";
 inputBlue.maxLength = "3";
-inputBlue.style.border = "2px solid blue";
-inputBlue.style.background = "rgb(88, 88, 247)";
 
 const inputRed = document.createElement("input");
 inputRed.className = "red input";
 inputRed.placeholder = "RED";
 inputRed.maxLength = "3";
-inputRed.style.border = "2px solid red";
-inputRed.style.background = "#ff9b9b";
 
 const inputGreen = document.createElement("input");
 inputGreen.className = "green input";
 inputGreen.placeholder = "GREEN";
 inputGreen.maxLength = "3";
-inputGreen.style.border = "2px solid green";
-inputGreen.style.background = "rgb(0, 255, 0)";
+inputGreen.min = "1";
+inputGreen.max = "255";
 
 const formTitle = document.createElement("h1");
 formTitle.className = "title";
-formTitle.textContent = "Введите число для каждого блока:";
+formTitle.textContent = "Input digit for each block:";
+formTitle.style.textTransform = "upperCase";
 
-form.append(formTitle, inputRed, inputBlue, inputGreen);
-container.append(form);
+const blockRed = document.createElement("div");
+blockRed.className = "blockRed";
+blockRed.append(inputRed);
+
+const blockGreen = document.createElement("div");
+blockGreen.className = "blockGreen";
+blockGreen.append(inputGreen);
+
+const blockBlue = document.createElement("div");
+blockBlue.className = "blockBlue";
+blockBlue.append(inputBlue);
+
+const button = document.createElement("button");
+button.className = "button";
+button.textContent = "SUBMIT";
+
+const block = document.createElement("div");
+block.className = "new-block";
+
+form.append(blockRed, blockGreen, blockBlue);
+container.append(formTitle, form, button, block);
 document.body.append(container);
 
-// function createBlock() {}
+inputGreen.onchange = function (e) {
+  var value = parseInt(e.target.value);
+  if (!value || value <= 0 || value > 255) {
+    if (value > 255) {
+      e.target.value = 255;
+    } else if (!value) {
+      e.target.value = 0;
+    } else if (value <= 0) {
+      e.target.value = 0;
+    }
+  }
+};
 
-// function rgb(r, g, b) {
-//   r > 255 ? (r = 255) : "";
-//   g > 255 ? (g = 255) : "";
-//   b > 255 ? (b = 255) : "";
-//   r < 0 ? (r = 0) : "";
-//   g < 0 ? (g = 0) : "";
-//   b < 0 ? (b = 0) : "";
+inputBlue.onchange = function (e) {
+  var value = parseInt(e.target.value);
+  if (!value || value <= 0 || value > 255) {
+    if (value > 255) {
+      e.target.value = 255;
+    } else if (!value) {
+      e.target.value = 0;
+    } else if (value <= 0) {
+      e.target.value = 0;
+    }
+  }
+};
 
-//   let rColor = r.toString(16).toUpperCase();
-//   let gColor = g.toString(16).toUpperCase();
-//   let bgColor = b.toString(16).toUpperCase();
+inputRed.onchange = function (e) {
+  var value = parseInt(e.target.value);
+  if (!value || value <= 0 || value > 255) {
+    if (value > 255) {
+      e.target.value = 255;
+    } else if (!value) {
+      e.target.value = 0;
+    } else if (value <= 0) {
+      e.target.value = 0;
+    }
+  }
+};
 
-//   if (rColor.length === 1) {
-//     rColor = "0" + r;
-//   } else {
-//     rColor = rColor;
-//   }
-//   if (gColor.length === 1) {
-//     gColor = "0" + gColor;
-//   } else {
-//     gColor = gColor;
-//   }
-//   if (bgColor.length === 1) {
-//     bgColor = "0" + bgColor;
-//   } else {
-//     bgColor = bgColor;
-//   }
-// }
+function rgb(inputRed, inputGreen, inputBlue) {
+  inputRed > 255 ? (inputRed = 255) : "";
+  inputGreen > 255 ? (inputGreen = 255) : "";
+  inputBlue > 255 ? (inputBlue = 255) : "";
+  inputRed < 0 ? (inputRed = 0) : "";
+  inputGreen < 0 ? (inputGreen = 0) : "";
+  inputBlue < 0 ? (inputBlue = 0) : "";
 
-// rgb(300, 255, 255);
+  let rColor = Number(inputRed.value).toString(16).toUpperCase();
+  let gColor = Number(inputGreen.value).toString(16).toUpperCase();
+  let bgColor = Number(inputBlue.value).toString(16).toUpperCase();
+
+  if (rColor.length === 1) {
+    rColor = "0" + rColor;
+  } else {
+    rColor = rColor;
+  }
+  if (gColor.length === 1) {
+    gColor = "0" + gColor;
+  } else {
+    gColor = gColor;
+  }
+  if (bgColor.length === 1) {
+    bgColor = "0" + bgColor;
+  } else {
+    bgColor = bgColor;
+  }
+  const color = "#" + rColor + gColor + bgColor;
+
+  return color;
+}
+
+function random(min, max) {
+  return Math.round(min - 0.5 + Math.random() * (max - min + 1));
+}
+
+function randomColor() {
+  const colors = [
+    "#5776b9",
+    "#d9051b",
+    "#ffdb03",
+    "#42a60b",
+    "#fee610",
+    "#fc614d",
+    "#63bb43",
+    "#71a9d8",
+  ];
+  const index = random(0, colors.length);
+  return colors[index];
+}
+
+button.addEventListener("click", () => {
+  block.style.color = randomColor();
+  block.style.background = rgb(inputRed, inputGreen, inputBlue);
+  block.innerHTML = `Your Color:<br>${rgb(inputRed, inputGreen, inputBlue)}`;
+});
